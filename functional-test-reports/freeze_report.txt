@@ -1,29 +1,30 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.12.4, pytest-7.4.4, pluggy-1.0.0 -- /opt/anaconda3/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/username/redacted
+rootdir: /Users/phammo/Desktop/Spring26/CSCI-5801/python-chess
 plugins: anyio-4.2.0
-collecting ... collected 14 items
+collecting ... collected 15 items
 
-test_spell_logic.py::TestFreezeTarget::test_freeze_affects_opponent_not_caster FAILED [  7%]
-test_spell_logic.py::TestFreezeInitialState::test_freeze_defaults PASSED [ 14%]
-test_spell_logic.py::TestFreezeInitialState::test_new_game_resets_freeze_state PASSED [ 21%]
-test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_center_square_included FAILED [ 28%]
-test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_corner_has_four_squares FAILED [ 35%]
-test_spell_logic.py::TestFreezeArea::test_cast_freeze_sets_effect_squares PASSED [ 42%]
-test_spell_logic.py::TestFreezeCastRules::test_freeze_decreases_current_player_charges FAILED [ 50%]
-test_spell_logic.py::TestFreezeCastRules::test_freeze_prevents_second_cast_same_turn PASSED [ 57%]
-test_spell_logic.py::TestFreezeCastRules::test_freeze_fails_with_no_charges PASSED [ 64%]
-test_spell_logic.py::TestFreezeCastRules::test_freeze_can_target_any_board_square PASSED [ 71%]
-test_spell_logic.py::TestFreezeMoveBlocking::test_frozen_piece_origins_are_blocked FAILED [ 78%]
-test_spell_logic.py::TestFreezeEffectDuration::test_freeze_effect_expires_after_opponent_moves_once FAILED [ 85%]
-test_spell_logic.py::TestFreezeEffectDuration::test_freeze_cooldown_decrements_on_caster_turn_start FAILED [ 92%]
+test_spell_logic.py::TestFreezeTarget::test_freeze_affects_opponent_not_caster FAILED [  6%]
+test_spell_logic.py::TestFreezeTarget::test_jump_cooldown_prevents_jump PASSED [ 13%]
+test_spell_logic.py::TestFreezeTarget::test_jump_cooldown_decreases_every_turn FAILED [ 20%]
+test_spell_logic.py::TestFreezeTarget::test_jump_caster_cannot_cast_until_cooldown_reaches_zero PASSED [ 26%]
+test_spell_logic.py::TestFreezeInitialState::test_freeze_defaults PASSED [ 33%]
+test_spell_logic.py::TestFreezeInitialState::test_new_game_resets_freeze_state PASSED [ 40%]
+test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_center_square_included FAILED [ 46%]
+test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_corner_has_four_squares FAILED [ 53%]
+test_spell_logic.py::TestFreezeCastRules::test_freeze_decreases_current_player_charges FAILED [ 60%]
+test_spell_logic.py::TestFreezeCastRules::test_freeze_prevents_second_cast_same_turn PASSED [ 66%]
+test_spell_logic.py::TestFreezeCastRules::test_freeze_fails_with_no_charges PASSED [ 73%]
+test_spell_logic.py::TestFreezeMoveBlocking::test_frozen_piece_origins_are_blocked FAILED [ 80%]
+test_spell_logic.py::TestFreezeEffectDuration::test_freeze_effect_expires_after_opponent_moves_once FAILED [ 86%]
+test_spell_logic.py::TestFreezeEffectDuration::test_freeze_cooldown_decrements_on_caster_turn_start FAILED [ 93%]
 test_spell_logic.py::TestFrozenPieceChecks::test_frozen_piece_still_gives_check PASSED [100%]
 
 =================================== FAILURES ===================================
 ___________ TestFreezeTarget.test_freeze_affects_opponent_not_caster ___________
 
-self = <test_spell_logic.TestFreezeTarget object at 0x1016d3c20>
+self = <test_spell_logic.TestFreezeTarget object at 0x101ec5d30>
 
     def test_freeze_affects_opponent_not_caster(self):
         game = SpellChessGame()
@@ -32,13 +33,25 @@ self = <test_spell_logic.TestFreezeTarget object at 0x1016d3c20>
         # The frozen color should be Black (the opponent), not White
 >       assert game.freeze_effect_color == chess.BLACK
 E       assert True == False
-E        +  where True = <spell_logic.SpellChessGame object at 0x101728320>.freeze_effect_color
+E        +  where True = <spell_logic.SpellChessGame object at 0x1026e3230>.freeze_effect_color
 E        +  and   False = chess.BLACK
 
 test_spell_logic.py:28: AssertionError
+___________ TestFreezeTarget.test_jump_cooldown_decreases_every_turn ___________
+
+self = <test_spell_logic.TestFreezeTarget object at 0x1026e2510>
+
+    def test_jump_cooldown_decreases_every_turn(self):
+        game = SpellChessGame()
+        game.jump_cooldown[chess.WHITE] = 2
+        game.board.turn = chess.BLACK
+>       assert game.jump_cooldown[chess.WHITE] == 1
+E       assert 2 == 1
+
+test_spell_logic.py:129: AssertionError
 __________ TestFreezeArea.test_squares_in_3x3_center_square_included ___________
 
-self = <test_spell_logic.TestFreezeArea object at 0x101bcbe30>
+self = <test_spell_logic.TestFreezeArea object at 0x1026e2900>
 
     def test_squares_in_3x3_center_square_included(self):
         area = squares_in_3x3(chess.E5)
@@ -46,10 +59,10 @@ self = <test_spell_logic.TestFreezeArea object at 0x101bcbe30>
 E       assert 36 in {27, 28, 29, 35, 37, 43, ...}
 E        +  where 36 = chess.E5
 
-test_spell_logic.py:79: AssertionError
+test_spell_logic.py:174: AssertionError
 __________ TestFreezeArea.test_squares_in_3x3_corner_has_four_squares __________
 
-self = <test_spell_logic.TestFreezeArea object at 0x101bcbf50>
+self = <test_spell_logic.TestFreezeArea object at 0x1026e2a20>
 
     def test_squares_in_3x3_corner_has_four_squares(self):
         area = squares_in_3x3(chess.A1)
@@ -62,10 +75,10 @@ E         - {0, 8, 1, 9}
 E         ?  ---
 E         + {8, 1, 9}
 
-test_spell_logic.py:83: AssertionError
+test_spell_logic.py:178: AssertionError
 _______ TestFreezeCastRules.test_freeze_decreases_current_player_charges _______
 
-self = <test_spell_logic.TestFreezeCastRules object at 0x101bec1d0>
+self = <test_spell_logic.TestFreezeCastRules object at 0x1026e2ae0>
 
     def test_freeze_decreases_current_player_charges(self):
         game = SpellChessGame()
@@ -74,10 +87,10 @@ self = <test_spell_logic.TestFreezeCastRules object at 0x101bec1d0>
 >       assert game.freeze_remaining[chess.WHITE] == before - 1
 E       assert 5 == (5 - 1)
 
-test_spell_logic.py:99: AssertionError
+test_spell_logic.py:188: AssertionError
 _________ TestFreezeMoveBlocking.test_frozen_piece_origins_are_blocked _________
 
-self = <test_spell_logic.TestFreezeMoveBlocking object at 0x101bec1a0>
+self = <test_spell_logic.TestFreezeMoveBlocking object at 0x1026e2d50>
 
     def test_frozen_piece_origins_are_blocked(self):
         game = SpellChessGame()
@@ -90,23 +103,23 @@ E        +  where Move.from_uci('e7e5') = <bound method Move.from_uci of <class 
 E        +    where <bound method Move.from_uci of <class 'chess.Move'>> = <class 'chess.Move'>.from_uci
 E        +      where <class 'chess.Move'> = chess.Move
 
-test_spell_logic.py:124: AssertionError
+test_spell_logic.py:209: AssertionError
 _ TestFreezeEffectDuration.test_freeze_effect_expires_after_opponent_moves_once _
 
-self = <test_spell_logic.TestFreezeEffectDuration object at 0x101bec440>
+self = <test_spell_logic.TestFreezeEffectDuration object at 0x1026e2f00>
 
     def test_freeze_effect_expires_after_opponent_moves_once(self):
         game = SpellChessGame()
         assert game.cast_freeze(chess.E7) is True
 >       assert game.freeze_effect_color == chess.BLACK
 E       assert True == False
-E        +  where True = <spell_logic.SpellChessGame object at 0x101bec980>.freeze_effect_color
+E        +  where True = <spell_logic.SpellChessGame object at 0x102708e00>.freeze_effect_color
 E        +  and   False = chess.BLACK
 
-test_spell_logic.py:134: AssertionError
+test_spell_logic.py:219: AssertionError
 _ TestFreezeEffectDuration.test_freeze_cooldown_decrements_on_caster_turn_start _
 
-self = <test_spell_logic.TestFreezeEffectDuration object at 0x101bec560>
+self = <test_spell_logic.TestFreezeEffectDuration object at 0x1026e3020>
 
     def test_freeze_cooldown_decrements_on_caster_turn_start(self):
         game = SpellChessGame()
@@ -116,13 +129,14 @@ self = <test_spell_logic.TestFreezeEffectDuration object at 0x101bec560>
 >       assert game.freeze_cooldown[chess.WHITE] == 2
 E       assert 3 == 2
 
-test_spell_logic.py:149: AssertionError
+test_spell_logic.py:234: AssertionError
 =========================== short test summary info ============================
 FAILED test_spell_logic.py::TestFreezeTarget::test_freeze_affects_opponent_not_caster
+FAILED test_spell_logic.py::TestFreezeTarget::test_jump_cooldown_decreases_every_turn
 FAILED test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_center_square_included
 FAILED test_spell_logic.py::TestFreezeArea::test_squares_in_3x3_corner_has_four_squares
 FAILED test_spell_logic.py::TestFreezeCastRules::test_freeze_decreases_current_player_charges
 FAILED test_spell_logic.py::TestFreezeMoveBlocking::test_frozen_piece_origins_are_blocked
 FAILED test_spell_logic.py::TestFreezeEffectDuration::test_freeze_effect_expires_after_opponent_moves_once
 FAILED test_spell_logic.py::TestFreezeEffectDuration::test_freeze_cooldown_decrements_on_caster_turn_start
-========================= 7 failed, 7 passed in 0.05s ==========================
+========================= 8 failed, 7 passed in 0.06s ==========================

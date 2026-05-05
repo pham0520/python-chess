@@ -326,7 +326,7 @@ class TestGameStateDisplay:
         
         game.cast_jump(chess.A2, chess.A3)
         
-        # After casting, it should reflect the 2-turn cooldown
+        # After casting, it should show the 2-turn cooldown
         info = game.jump_info_text().lower()
         assert "cooldown" in info
         assert "2" in info
