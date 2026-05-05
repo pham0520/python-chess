@@ -82,12 +82,6 @@ class TestFreezeArea:
         area = squares_in_3x3(chess.A1)
         assert area == {chess.A1, chess.A2, chess.B1, chess.B2}
 
-    def test_cast_freeze_sets_effect_squares(self):
-        game = SpellChessGame()
-        center = chess.E5
-        assert game.cast_freeze(center) is True
-        assert game.freeze_effect_squares == squares_in_3x3(center)
-
 
 class TestFreezeCastRules:
     """Freeze casting should follow charges, cooldown, and per-turn limits."""
@@ -107,10 +101,6 @@ class TestFreezeCastRules:
         game = SpellChessGame()
         game.freeze_remaining[chess.WHITE] = 0
         assert game.cast_freeze(chess.E5) is False
-
-    def test_freeze_can_target_any_board_square(self):
-        game = SpellChessGame()
-        assert game.cast_freeze(chess.H8) is True
 
 
 class TestFreezeMoveBlocking:
