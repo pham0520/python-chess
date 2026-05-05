@@ -44,6 +44,7 @@ class TestNewGameResetsBoard:
 #  If a test fails, you've found a bug — document it!                 #
 # ------------------------------------------------------------------ #
 
+# Tests for jump spell
 class TestJumpSpellIntialState:
     """ Test that the Jump spell behaves according to the rules. """
     def test_jump_defaults(self):
@@ -57,6 +58,7 @@ class TestJumpSpellIntialState:
         assert game.jump_cooldown[chess.BLACK] == 0
         assert game.jump_casted_this_turn == False 
         
+
 class TestJumpCastRules:
     
     def test_jump_decreases_current_player_charge(self):
@@ -99,6 +101,7 @@ class TestJumpCastRules:
         assert chess.C5 not in squares_in_jump_range(chess.E2) 
         # Bug: I caught another bug in the code we allow it to go past the chebyshev distance by an offset of 3 and not 2
     
+
 class TestJumpEffect:
     def test_jump_ignores_inbetween_pieces(self):
         game = SpellChessGame()
@@ -111,6 +114,7 @@ class TestJumpEffect:
         assert game.cast_jump(chess.E2, chess.E4)
         assert game.board.piece_at(chess.E4) == chess.Piece(chess.PAWN, chess.WHITE)
     
+
 class TestJumpCoolDown:
     def test_jump_cooldown_prevents_jump(self):
         game = SpellChessGame()
@@ -132,7 +136,9 @@ class TestJumpCoolDown:
         assert game.cast_jump(chess.E2, chess.E4) == False
         game.jump_cooldown[chess.WHITE] = 0
         assert game.cast_jump(chess.E2, chess.E4) == True  
-        
+
+
+# Tests for freeze spell
 class TestFreezeInitialState:
     """Freeze bookkeeping should start with default values."""
 
@@ -247,3 +253,81 @@ class TestFrozenPieceChecks:
         
         # Black king must still be in check
         assert game.board.is_check()
+
+# Test for Game Display
+class TestGameStateDisplay:
+
+    def test_status_shows_current_turn(self):
+        """The game should show whose turn it is."""
+        game = SpellChessGame()
+        # It starts as White's turn
+        assert "White" in game.status_text()
+        
+        # After a move, it becomes Black's turn
+        game.make_move(chess.E2, chess.E4)
+        assert "Black" in game.status_text()
+
+        # After a second move, it becomes White's turn again
+        game.make_move(chess.G7, chess.G6)
+        assert "White" in game.status_text()
+
+    def test_status_shows_check(self):
+        """The game should indicate if the current side is in check."""
+        game = SpellChessGame()
+        # Set up a board where White king is in check by a Black rook
+        game.board.clear()
+        game.board.set_piece_at(chess.E1, chess.Piece(chess.KING, chess.WHITE))
+        game.board.set_piece_at(chess.E8, chess.Piece(chess.ROOK, chess.BLACK))
+        game.board.turn = chess.WHITE
+        
+        status = game.status_text().lower()
+        assert "check" in status
+
+    def test_freeze_info_shows_current_player_charges(self):
+        """The freeze label should show the current player's remaining charges."""
+        game = SpellChessGame()
+        # White starts with 5 charges
+        assert "5" in game.freeze_info_text()
+        
+        # White casts a spell, charges go down to 4
+        game.cast_freeze(chess.A6)
+        game.make_move(chess.E2, chess.E4)
+        
+        # Now it is Black's turn; Black should still have 5 charges showing
+        assert "5" in game.freeze_info_text()
+
+    def test_freeze_info_shows_cooldown(self):
+        """When the current player is on cooldown, the label shows remaining turns."""
+        game = SpellChessGame()
+        game.cast_freeze(chess.E5)
+        
+        # White just cast freeze, so they enter a 3-turn cooldown
+        info = game.freeze_info_text().lower()
+        assert "cooldown" in info
+        assert "3" in info
+        # Bug found here: The cooldown should be 3 since we have not finished our turn
+
+    def test_freeze_info_shows_frozen_warning(self):
+        """When the current player's pieces are frozen, the label includes a warning."""
+        game = SpellChessGame()
+        # White casts freeze on Black's starting pieces
+        game.cast_freeze(chess.E7)
+        game.make_move(chess.E2, chess.E4)
+        
+        # Now it is Black's turn. Black is the frozen color.
+        info = game.freeze_info_text().lower()
+        assert "frozen" in info
+
+    def test_jump_info_shows_charges_and_cooldown(self):
+        """The jump label should display current player charges and cooldowns."""
+        game = SpellChessGame()
+        # Starts with 3 charges
+        assert "3" in game.jump_info_text()
+        
+        game.cast_jump(chess.A2, chess.A3)
+        
+        # After casting, it should reflect the 2-turn cooldown
+        info = game.jump_info_text().lower()
+        assert "cooldown" in info
+        assert "2" in info
+        
