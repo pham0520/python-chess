@@ -1,0 +1,81 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-7.4.4, pluggy-1.0.0 -- /opt/anaconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/phammo/Desktop/Spring26/CSCI-5801/python-chess
+plugins: anyio-4.2.0
+collecting ... collected 13 items
+
+test_spell_logic.py::TestJumpSpellIntialState::test_jump_defaults PASSED [  7%]
+test_spell_logic.py::TestJumpCastRules::test_jump_decreases_current_player_charge PASSED [ 15%]
+test_spell_logic.py::TestJumpCastRules::test_jump_prevents_second_cast_same_turn PASSED [ 23%]
+test_spell_logic.py::TestJumpCastRules::test_jump_fails_with_no_charges PASSED [ 30%]
+test_spell_logic.py::TestJumpCastRules::test_jump_fails_on_opponent_piece PASSED [ 38%]
+test_spell_logic.py::TestJumpCastRules::test_jump_fail_if_target_occupied FAILED [ 46%]
+test_spell_logic.py::TestJumpCastRules::test_jump_cannot_jump_king FAILED [ 53%]
+test_spell_logic.py::TestJumpCastRules::test_chebyshev_distance_of_2 FAILED [ 61%]
+test_spell_logic.py::TestJumpEffect::test_jump_ignores_inbetween_pieces PASSED [ 69%]
+test_spell_logic.py::TestJumpEffect::test_jump_lands_on_empty_square PASSED [ 76%]
+test_spell_logic.py::TestJumpCoolDown::test_jump_cooldown_prevents_jump PASSED [ 84%]
+test_spell_logic.py::TestJumpCoolDown::test_jump_cooldown_decreases_every_turn FAILED [ 92%]
+test_spell_logic.py::TestJumpCoolDown::test_jump_caster_cannot_cast_until_cooldown_reaches_zero PASSED [100%]
+
+=================================== FAILURES ===================================
+_____________ TestJumpCastRules.test_jump_fail_if_target_occupied ______________
+
+self = <test_spell_logic.TestJumpCastRules object at 0x104473a70>
+
+    def test_jump_fail_if_target_occupied(self):
+        game = SpellChessGame()
+>       assert game.cast_jump(chess.B1, chess.C2) == False
+E       assert True == False
+E        +  where True = <bound method SpellChessGame.cast_jump of <spell_logic.SpellChessGame object at 0x10449c080>>(1, 10)
+E        +    where <bound method SpellChessGame.cast_jump of <spell_logic.SpellChessGame object at 0x10449c080>> = <spell_logic.SpellChessGame object at 0x10449c080>.cast_jump
+E        +    and   1 = chess.B1
+E        +    and   10 = chess.C2
+
+test_spell_logic.py:85: AssertionError
+_________________ TestJumpCastRules.test_jump_cannot_jump_king _________________
+
+self = <test_spell_logic.TestJumpCastRules object at 0x104473b90>
+
+    def test_jump_cannot_jump_king(self):
+        game = SpellChessGame()
+>       assert game.cast_jump(chess.E1, chess.E3) == False
+E       assert True == False
+E        +  where True = <bound method SpellChessGame.cast_jump of <spell_logic.SpellChessGame object at 0x1040657c0>>(4, 20)
+E        +    where <bound method SpellChessGame.cast_jump of <spell_logic.SpellChessGame object at 0x1040657c0>> = <spell_logic.SpellChessGame object at 0x1040657c0>.cast_jump
+E        +    and   4 = chess.E1
+E        +    and   20 = chess.E3
+
+test_spell_logic.py:91: AssertionError
+________________ TestJumpCastRules.test_chebyshev_distance_of_2 ________________
+
+self = <test_spell_logic.TestJumpCastRules object at 0x104473cb0>
+
+    def test_chebyshev_distance_of_2(self):
+        game = SpellChessGame()
+>       assert chess.E5 not in squares_in_jump_range(chess.E2)
+E       assert 36 not in {1, 2, 3, 4, 5, 6, ...}
+E        +  where 36 = chess.E5
+E        +  and   {1, 2, 3, 4, 5, 6, ...} = squares_in_jump_range(12)
+E        +    where 12 = chess.E2
+
+test_spell_logic.py:97: AssertionError
+___________ TestJumpCoolDown.test_jump_cooldown_decreases_every_turn ___________
+
+self = <test_spell_logic.TestJumpCoolDown object at 0x1044738f0>
+
+    def test_jump_cooldown_decreases_every_turn(self):
+        game = SpellChessGame()
+        game.jump_cooldown[chess.WHITE] = 2
+        game.board.turn = chess.BLACK
+>       assert game.jump_cooldown[chess.WHITE] == 1
+E       assert 2 == 1
+
+test_spell_logic.py:124: AssertionError
+=========================== short test summary info ============================
+FAILED test_spell_logic.py::TestJumpCastRules::test_jump_fail_if_target_occupied
+FAILED test_spell_logic.py::TestJumpCastRules::test_jump_cannot_jump_king - a...
+FAILED test_spell_logic.py::TestJumpCastRules::test_chebyshev_distance_of_2
+FAILED test_spell_logic.py::TestJumpCoolDown::test_jump_cooldown_decreases_every_turn
+========================= 4 failed, 9 passed in 0.04s ==========================
