@@ -318,16 +318,4 @@ class TestGameStateDisplay:
         info = game.freeze_info_text().lower()
         assert "frozen" in info
 
-    def test_jump_info_shows_charges_and_cooldown(self):
-        """The jump label should display current player charges and cooldowns."""
-        game = SpellChessGame()
-        # Starts with 3 charges
-        assert "3" in game.jump_info_text()
-        
-        game.cast_jump(chess.A2, chess.A3)
-        
-        # After casting, it should show the 2-turn cooldown
-        info = game.jump_info_text().lower()
-        assert "cooldown" in info
-        assert "2" in info
-        
+

@@ -1,21 +1,20 @@
 ============================= test session starts ==============================
 platform darwin -- Python 3.12.4, pytest-7.4.4, pluggy-1.0.0 -- /opt/anaconda3/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/username/redacted
+rootdir: /Users/phammo/Desktop/Spring26/CSCI-5801/python-chess
 plugins: anyio-4.2.0
-collecting ... collected 6 items
+collecting ... collected 5 items
 
-test_spell_logic.py::TestGameStateDisplay::test_status_shows_current_turn PASSED [ 16%]
-test_spell_logic.py::TestGameStateDisplay::test_status_shows_check PASSED [ 33%]
-test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_current_player_charges PASSED [ 50%]
-test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_cooldown FAILED [ 66%]
-test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_frozen_warning PASSED [ 83%]
-test_spell_logic.py::TestGameStateDisplay::test_jump_info_shows_charges_and_cooldown PASSED [100%]
+test_spell_logic.py::TestGameStateDisplay::test_status_shows_current_turn PASSED [ 20%]
+test_spell_logic.py::TestGameStateDisplay::test_status_shows_check PASSED [ 40%]
+test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_current_player_charges PASSED [ 60%]
+test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_cooldown FAILED [ 80%]
+test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_frozen_warning PASSED [100%]
 
 =================================== FAILURES ===================================
 _____________ TestGameStateDisplay.test_freeze_info_shows_cooldown _____________
 
-self = <test_spell_logic.TestGameStateDisplay object at 0x10230aff0>
+self = <test_spell_logic.TestGameStateDisplay object at 0x1060ef5c0>
 
     def test_freeze_info_shows_cooldown(self):
         """When the current player is on cooldown, the label shows remaining turns."""
@@ -28,7 +27,7 @@ self = <test_spell_logic.TestGameStateDisplay object at 0x10230aff0>
 >       assert "3" in info
 E       AssertionError: assert '3' in 'freeze: 5  (cooldown 2)  — pieces in area are frozen'
 
-test_spell_logic.py:317: AssertionError
+test_spell_logic.py:307: AssertionError
 =========================== short test summary info ============================
 FAILED test_spell_logic.py::TestGameStateDisplay::test_freeze_info_shows_cooldown
-========================= 1 failed, 5 passed in 0.04s ==========================
+========================= 1 failed, 4 passed in 0.04s ==========================
